@@ -1,5 +1,7 @@
 #!/usr/bin/env macruby
 
+# Thank you rubiojr: https://gist.github.com/rubiojr/245402
+
 framework 'AppKit'
 require 'socket'
 
