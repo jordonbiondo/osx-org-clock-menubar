@@ -43,6 +43,8 @@ use `ocm-get-process' when using.")
 (defvar ocm--last-sent-string ""
   "Used so we don't send updates when we don't need to.")
 
+(defvar ocm--timer nil)
+
 (defun ocm--make-process ()
   (setq ocm-network-process
         (open-network-stream "ocm-network-process"
@@ -80,7 +82,8 @@ use `ocm-get-process' when using.")
       (file-error (message "Could not connect to ocm-server on '%s:%s', are you sure it's running?"
                            ocm-network-host ocm-network-port)
                   (org-clock-menubar-mode -1))))
-  (ignore-errors (ocm-update-menu-bar (ocm--string-for-task))))
+  (ignore-errors (ocm-update-menu-bar (ocm--string-for-task)))
+  (ocm--configure-timer))
 
 (defun ocm--maybe-update-or-disable ()
   "If `org-clock-menubar-mode' is enabled, attempt to update the menu text.
@@ -97,6 +100,11 @@ If there is an error, `org-clock-menubar-mode' will be disabled."
 
 (defadvice org-clock-out (after ocm-update-clock-out activate)
   (ocm--maybe-update-or-disable))
+
+(defun ocm--configure-timer ()
+  (when (timerp ocm--timer) (cancel-timer ocm--timer))
+  (when org-clock-menubar-mode
+    (setq ocm--timer (run-with-timer 20 20 'ocm--maybe-update-or-disable))))
 
 (provide 'osx-org-clock-menubar)
 ;;; osx-org-clock-menubar.el ends here
