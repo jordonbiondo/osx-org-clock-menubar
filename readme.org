@@ -1,0 +1,18 @@
+* OSX org-clock-menubar
+  org-clock visibility on the osx menu bar
+  [[http://i.imgur.com/vOgaPGl.png]]
+  
+** Setup
+   - Requires macruby to be installed: https://github.com/MacRuby/MacRuby (I plan on rewriting the server is obj-c later)
+   - add osx-org-clock-menubar.el to your load-path and load it
+     #+BEGIN_SRC lisp
+     (add-to-list 'load-path "/path/to/folder/containing/elisp/file/")
+     (load-library 'osx-org-clock-menubar)
+     #+END_SRC
+   - start the server from a shell
+     #+BEGIN_SRC shell-script
+     macruby ocm-server.rb
+     #+END_SRC
+   - enable the minor mode with M-x org-clock-menubar-mode
+
+     
