@@ -3,7 +3,7 @@
 ;; Copyright (C) 2015  Jordon Biondo
 
 ;; Author: Jordon Biondo <jordonbiondo@gmail.com>
-;; Keywords: 
+;; Keywords: org, osx
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-
-;; 
+;;
+;;
 
 ;;; Code:
 
@@ -46,30 +46,35 @@ use `ocm-get-process' when using.")
 (defvar ocm--timer nil)
 
 (defun ocm--make-process ()
+  "Return a new network process that connects to the ocm-server."
   (setq ocm-network-process
-        (open-network-stream "ocm-network-process"
-                             (get-buffer-create "*ocm-network-process*")
-                             ocm-network-host
-                             ocm-network-port
-                             :type 'plain)))
+        (open-network-stream
+         "ocm-network-process"
+         (get-buffer-create "*ocm-network-process*")
+         ocm-network-host
+         ocm-network-port
+         :type 'plain)))
 
-(defun ocm-get-process ()
+(defun ocm--get-process ()
+  "Return the current ocm process or create a new one if needed."
   (or (and (processp ocm-network-process)
            (process-live-p ocm-network-process)
            ocm-network-process)
       (ocm--make-process)))
 
 (defun ocm--string-for-task ()
+  "Return the string that will be displayed in the menu bar."
   (if (and org-clock-menubar-mode org-clock-current-task)
       (org-clock-get-clock-string)
     ocm-no-task-string))
 
-(defun ocm-update-menu-bar (string)
+(defun ocm--update-menu-bar (string)
+  "Send STRING to be displayed on the menu bar."
   (when (and t (not (equal ocm--last-sent-string string))
-             (ocm-get-process))
+             (ocm--get-process))
     (setq ocm--last-sent-string string)
-    (process-send-string (ocm-get-process) (format "%s\n" string))))
-  
+    (process-send-string (ocm--get-process) (format "%s\n" string))))
+
 (define-minor-mode org-clock-menubar-mode
   "Minor mode to display the current org clock task and time in the OSX menu bar."
   :init-value nil
@@ -82,7 +87,7 @@ use `ocm-get-process' when using.")
       (file-error (message "Could not connect to ocm-server on '%s:%s', are you sure it's running?"
                            ocm-network-host ocm-network-port)
                   (org-clock-menubar-mode -1))))
-  (ignore-errors (ocm-update-menu-bar (ocm--string-for-task)))
+  (ignore-errors (ocm--update-menu-bar (ocm--string-for-task)))
   (ocm--configure-timer))
 
 (defun ocm--maybe-update-or-disable ()
@@ -90,7 +95,7 @@ use `ocm-get-process' when using.")
 If there is an error, `org-clock-menubar-mode' will be disabled."
   (when org-clock-menubar-mode
     (condition-case nil
-        (ocm-update-menu-bar (ocm--string-for-task))
+        (ocm--update-menu-bar (ocm--string-for-task))
       (file-error
        (message "Error communicating with ocm-server, disabling `org-clock-menubar-mode'.")
        (org-clock-menubar-mode -1)))))
@@ -102,6 +107,7 @@ If there is an error, `org-clock-menubar-mode' will be disabled."
   (ocm--maybe-update-or-disable))
 
 (defun ocm--configure-timer ()
+  "Run or stop running a timer to update the menu bar appropriately."
   (when (timerp ocm--timer) (cancel-timer ocm--timer))
   (when org-clock-menubar-mode
     (setq ocm--timer (run-with-timer 20 20 'ocm--maybe-update-or-disable))))
