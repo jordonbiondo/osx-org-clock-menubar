@@ -1,6 +1,6 @@
 * OSX org-clock-menubar
   org-clock visibility on the osx menu bar
-  [[http://i.imgur.com/vOgaPGl.png]]
+  [[http://i.imgur.com/KVoxInn.png]]
   
 ** Setup
    - Requires macruby to be installed: https://github.com/MacRuby/MacRuby (I plan on rewriting the server is obj-c later)
