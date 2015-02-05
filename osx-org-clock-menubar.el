@@ -1,4 +1,4 @@
-;;; osx-org-clock-menubar.el --- simple menubar integration for org-clock  -*- lexical-binding: t; -*-
+;;; osx-org-clock-menubar.el --- simple menubar integration for org-clock
 
 ;; Copyright (C) 2015  Jordon Biondo
 
