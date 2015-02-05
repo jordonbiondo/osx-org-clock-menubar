@@ -124,6 +124,6 @@ class OCMApplication
   end
 end
 
-@port = ARGV[0].nil? ? 65_432 : ARGV[0].to_i
+@port = ARGV[0].nil? ? 65432 : ARGV[0].to_i
 ocm_server = OCMApplication.new(@port)
 ocm_server.run!
