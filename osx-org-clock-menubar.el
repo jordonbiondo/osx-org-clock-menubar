@@ -5,7 +5,7 @@
 ;; Author: Jordon Biondo <jordonbiondo@gmail.com>
 ;; Version: 0.1.1
 ;; Keywords: org, osx
-;; URL: www.github.com/jordonbiondo/.emacs.d
+;; URL: https://github.com/jordonbiondo/osx-org-clock-menubar
 ;; Package-Requires: ()
 ;;
 ;; This program is free software; you can redistribute it and/or modify
