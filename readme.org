@@ -15,4 +15,6 @@
      #+END_SRC
    - enable the minor mode with M-x org-clock-menubar-mode
 
-     
+** Alternatives
+   There is a nice alternative implementation here:
+   [[https://github.com/koddo/org-clock-statusbar-app][org-clock-statusbar-app]]
